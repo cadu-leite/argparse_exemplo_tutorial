@@ -189,7 +189,7 @@ Parâmetros opcionais são adicionados da mesma maneira que parâmetro posiciona
         "param_01_pos", help='este param é obrigatório'
     )
 
-    # isso é um parâmetro opcional. QUASE a mesma coisa só que com `action
+    # isso é um parâmetro OPCIONAL.
     parser.add_argument(
         "--param_01_opt", help='este param é opcional', action="store_true"
     )
@@ -215,8 +215,44 @@ Código com parâmetro opcional (não obrigatório e não posicional)
     print(f'==> O arg posicinal `param_01_opt` recebeu o valor = {args.param_01_opt} \n')
 
 
+Chamado do script com parâmetro opcional
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+    $ python argp_04_opcional.py -h
+
+**saída**
+
+repare que agora o argumento é mostrado abaixo dos parâmetros opcionais ("optional arguments:")
+
+::
+
+    usage: argp_04_opcional.py [-h] [--param_01_opt PARAM_01_OPT]
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --param_01_opt PARAM_01_OPT
+
+podemos executar o script sem nenhum parâmetro ...
 
 
+Chamada sem passar o parâmetro opcional
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+    $ python argp_04_opcional.py
+
+**saída**
+
+::
+
+    ==> O arg posicinal `param_01_opt` recebeu o valor = None
+
+como não passamos nenhum parâmetro, o valor atribuído ao parâmetro dentro do script é `none`.
+
+Mas não houve erro, como acontece em `Chamada do script sem o parâmetro obrigatório`_
 
 
 
