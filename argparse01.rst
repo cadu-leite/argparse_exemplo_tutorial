@@ -1,3 +1,15 @@
+
+.. meta::
+    :title: ARGPARSE Tutorial
+    :author: Carlos Leite /
+    :description: exemplos sobre o módulo python argparse
+    :description lang=en: samples about python argparse module
+    :keywords: python, argparse, sample, tutorial
+
+.. sectnum::
+    :depth: 3
+
+
 ***************************
 ArgParse tutorial  exemplos
 ***************************
