@@ -16,11 +16,11 @@ ArgParse tutorial  exemplos
 
 A interface mais simples que você pode ter com o usuário e um script Python - a linha de comando.
 
-O `$ ` indica que o que vem a seguir foi digitado na linha de comando do shell.
+    O `$ ` indica que o que vem a seguir foi digitado na linha de comando do shell.
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    $ <comando>
+        $> <comando>
 
 
 Argparse - Help Grátis
@@ -37,21 +37,23 @@ Somente criado o parser  é possível usar o parâmetro `--help` ou na forma abr
     import argparse
     parser = argparse.ArgumentParser()
     parser.parse_args()
+|
 
-chamada do script no shell
 
-.. code-block:: bash
+    **execução** do script no shell
 
-    $ python argp_01.py --help
+    .. code-block:: bash
 
-saída ...
+        $> python argp_01.py --help
 
-::
+    **saída** ...
 
-    usage: argp_01.py [-h]
+    ::
 
-    optional arguments:
-        -h, --help  show this help message and exit
+        usage: argp_01.py [-h]
+
+        optional arguments:
+            -h, --help  show this help message and exit
 
 
 Desligar o help padrão
@@ -66,20 +68,21 @@ para desligar o help padrão use o parâmetro `add_help=False`.
     import argparse
     parser = argparse.ArgumentParser(add_help=False)
     parser.parse_args()
+|
 
-chamada do script no shell
+    **execução** do script no shell
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    $ python argp_02_nohelp.py -h
+        $> python argp_02_nohelp.py -h
 
-saída
+    **saída**
 
-::
+    ::
 
-    usage: argp_02_nohelp.py
+        usage: argp_02_nohelp.py
 
-    argp_02_nohelp.py: error: unrecognized arguments: -h
+        argp_02_nohelp.py: error: unrecognized arguments: -h
 
 
 Parâmetros posicionais
@@ -119,22 +122,25 @@ ao adicionarmos um argumento posicional, o `argparse` adiciona este ao help, e f
 chamada passando o parâmetro obrigatório
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: bash
+    **execução**
 
-    $ python argp_03_posicional.py ArgumentoPosicional
+    .. code-block:: bash
 
-**saída** da chamada com parâmetro ...
+        $> python argp_03_posicional.py ArgumentoPosicional
 
-::
+    **saída** da chamada com parâmetro ...
 
-    ==> O arg posicinal `param_01_pos` recebeu o valor = ArgumentoPosicional
+    ::
+
+        ==> O arg posicinal `param_01_pos` recebeu o valor = ArgumentoPosicional
+
 
 Chamada do script sem o parâmetro obrigatório
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
-    $ python argp_03_posicional.py
+    $> python argp_03_posicional.py
 
 e quando o script é chamado sem parâmetro nenhum, nem mesmo o `--help`, ai sim, temos uma indicação de erro.
 
@@ -153,7 +159,7 @@ Chamada com `-h` após parâmetro posicional
 
 .. code-block:: bash
 
-    $ python argp_03_posicional.py -h
+    $> python argp_03_posicional.py -h
 
 **saída**
 
@@ -235,7 +241,7 @@ mas o parâmetro é passado sem um nome.
 
 .. code-block:: bash
 
-    $ python argp_04_opcional.py EuSouOParametro
+    $> python argp_04_opcional.py EuSouOParametro
 
 **saída** com erro, indicando que o argparse não reconheceu o parâmetro informado, porque não há um nome para o parâmetro e também não há um parâmetro posicional.
 
@@ -247,10 +253,9 @@ mas o parâmetro é passado sem um nome.
 
 **Execução:** O "help" do comando também é atualizado sobre o parâmetro opcional.
 
-
 .. code-block:: bash
 
-    $ python argp_04_opcional.py -h
+    $> python argp_04_opcional.py -h
 
 **saída**
 
@@ -274,7 +279,7 @@ Chamada sem o parâmetro opcional
 
 .. code-block:: bash
 
-    $ python argp_04_opcional.py
+    $> python argp_04_opcional.py
 
 **saída**
 
@@ -287,6 +292,54 @@ como não passamos nenhum parâmetro, o valor atribuído ao parâmetro dentro do
 Mas não houve erro, como acontece em `Chamada do script sem o parâmetro obrigatório`_
 
 
+Forma "curta"
+^^^^^^^^^^^^^
+
+como vários comandos no `bash` ou outros shell do linux,
+podemos implementar para o nosso script a forma curta do comando,
+usando mais um parâmetro no `add_argument`.
+
+ao invés de chamarmos o script passando o nome completo da variável como abaixo.
+
+.. code-block:: bash
+
+    # forma longa 
+    $> python argp_04_opcional.py --param_01_opt EuSouOpcional
+
+
+Se adicionarmos mais um parâmetro ao comando, neste caso o `-p`.
+
+.. code-block:: python
+
+    parser.add_argument(
+        '-p', '--param_01_opt', help='este param é opcional',
+    )
+
+podemos executar o comando 
+
+.. code-block:: bash
+
+    # podemos utilizar a forma curta do comando.
+    $> python argp_04_opcional.py -p EuSouOpcionalCURTO
+
+o help do ArgParse também mostra a forma curta 
+
+    **execução**
+
+    .. code-block:: bash
+
+        $> python argp_04_opcional.py -h
+
+    **saída**
+
+    ::
+
+        usage: argp_04_opcional.py [-h] [-p PARAM_01_OPT]
+
+        optional arguments:
+          -h, --help            show this help message and exit
+          -p PARAM_01_OPT, --param_01_opt PARAM_01_OPT
+                                este param é opcional
 
 
 Tipagem - além do tipo `string`
