@@ -353,7 +353,7 @@ Por padrão, tudo que vc passar em um parâmetro para o argparse será lido dent
 Script sem tipo definido
 ------------------------
 
-.. code-block:: pyton
+.. code-block:: python
 
     import argparse
     parser = argparse.ArgumentParser()
@@ -366,6 +366,30 @@ Script sem tipo definido
     args = parser.parse_args()
 
     print(f'==> O arg posicinal `param_01_opt` recebeu o valor = {args.param_01_opt} \n')
+
+
+
+.. note:: notas 
+
+|
+
+.. warning:: warning asasdf
+
+|
+
+.. caution:: caution afaslkasd
+
+|
+
+.. attention:: attention asdfasdf
+
+|
+
+
+
+
+
+
 
 
 
