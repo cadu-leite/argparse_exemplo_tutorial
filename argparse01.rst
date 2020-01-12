@@ -86,7 +86,7 @@ Parâmetros posicionais
 ======================
 
 
-Código com parâmetro posicional (obrigatório)
+Código com parâmetro POSICIONAL (obrigatório)
 ---------------------------------------------
 
 .. code-block:: python
@@ -116,6 +116,38 @@ Voltando ao nosso exemplo de ArgParse...
 ao adicionarmos um argumento posicional, o `argparse` adiciona este ao help, e faz as validações indicando se o parâmetro obrigatório foi ou não passado.
 
 
+chamada passando o parâmetro obrigatório
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+    $ python argp_03_posicional.py ArgumentoPosicional
+
+**saída** da chamada com parâmetro ...
+
+::
+
+    ==> O arg posicinal `param_01_pos` recebeu o valor = ArgumentoPosicional
+
+Chamada do script sem o parâmetro obrigatório
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+    $ python argp_03_posicional.py
+
+e quando o script é chamado sem parâmetro nenhum, nem mesmo o `--help`, ai sim, temos uma indicação de erro.
+
+**saída** com **erro** por falta do parâmetro obrigatório
+
+::
+
+    usage: argp_03_posicional.py [-h] param_01_pos
+    argp_03_posicional.py: error: the following arguments are required: param_01_pos
+
+... e claro, se passarmos o argumento corretamente ao executar o script, o `argparse` coloca o valor recebido "dentro" do atributo `param_01_pos` para que o script possa utilizá-lo.
+
+
 Chamada com `-h` após parâmetro posicional
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -138,40 +170,7 @@ Chamada com `-h` após parâmetro posicional
 
 Adicionando o parâmetro posicional no script passa a ser obrigatório informar o tal parâmetro.
 
-O ArgParse trata a entrada e se não informada, ele mostra uma mensagem de erro informando o usuário que um parâmetro é requerido.
-
-
-Chamada do script sem o parâmetro obrigatório
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-    $ python argp_03_posicional.py
-
-e quando o script é chamado sem parâmetro nenhum, nem mesmo o `--help`, ai sim, temos uma indicação de erro.
-
-**saída** com **erro** por falta do parâmetro obrigatório
-
-::
-
-    usage: argp_03_posicional.py [-h] param_01_pos
-    argp_03_posicional.py: error: the following arguments are required: param_01_pos
-
-... e claro, se passarmos o argumento corretamente ao executar o script, o `argparse` coloca o valor recebido "dentro" do atributo `param_01_pos` para que o script possa utilizá-lo.
-
-
-chamada passando o parâmetro obrigatório
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-    $ python argp_03_posicional.py ArgumentoPosicional
-
-**saída** da chamada com parâmetro ...
-
-::
-
-    ==> O arg posicinal `param_01_pos` recebeu o valor = ArgumentoPosicional
+O ArgParse trata a entrada, se não informada, ele mostra uma mensagem de erro informando o usuário que um parâmetro é requerido.
 
 
 Parâmetros Opcionais
@@ -180,23 +179,23 @@ Parâmetros Opcionais
 
 Parâmetros opcionais são adicionados da mesma maneira que parâmetro posicionais, ou seja, utilizando o `add_argument` do `parser`.
 
-**Uma** das várias maneiras, a mais simples, é adicionar dois traços "--" como prefixo do nome.
+O que torna um argumento opcional é adicionar `--` a frente do nome do argumento.
+
 
 .. code-block:: python
 
-    # isso é um parâmetro posicional (obrigatório)
+    # adicionar é um parâmetro POSICIONAL (obrigatório)
     parser.add_argument(
         "param_01_pos", help='este param é obrigatório'
     )
 
-    # isso é um parâmetro OPCIONAL.
+    # adiciona parâmetro OPCIONAL.
     parser.add_argument(
         "--param_01_opt", help='este param é opcional', action="store_true"
     )
 
 
-
-Código com parâmetro opcional (não obrigatório e não posicional)
+Script com parâmetro OPCIONAL (não obrigatório e não posicional)
 ----------------------------------------------------------------
 
 
@@ -215,8 +214,39 @@ Código com parâmetro opcional (não obrigatório e não posicional)
     print(f'==> O arg posicinal `param_01_opt` recebeu o valor = {args.param_01_opt} \n')
 
 
-Chamado do script com parâmetro opcional
+Chamada do script com parâmetro opcional
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Quando o parâmetro é opcional, temos que passar o nome do parâmetro e o valor (não eomente o valor) para que o argparse possa fazer o recorte ("parser") dos valores.
+
+
+.. code-block:: bash
+
+    $python argp_04_opcional.py --param_01_opt EuSouOpcional
+
+saida
+
+::
+
+    ==> O arg posicinal `param_01_opt` recebeu o valor = EuSouOpcional
+
+**Execução** chamada do script que espera SOMENTE um parâmetro opcional,
+mas o parâmetro é passado sem um nome.
+
+.. code-block:: bash
+
+    $ python argp_04_opcional.py EuSouOParametro
+
+**saída** com erro, indicando que o argparse não reconheceu o parâmetro informado, porque não há um nome para o parâmetro e também não há um parâmetro posicional.
+
+::
+
+    usage: argp_04_opcional.py [-h] [--param_01_opt PARAM_01_OPT]
+    argp_04_opcional.py: error: unrecognized arguments: EuSouOParametro
+
+
+**Execução:** O "help" do comando também é atualizado sobre o parâmetro opcional.
+
 
 .. code-block:: bash
 
@@ -224,7 +254,7 @@ Chamado do script com parâmetro opcional
 
 **saída**
 
-repare que agora o argumento é mostrado abaixo dos parâmetros opcionais ("optional arguments:")
+Ao pedir o "help" do script, repare que argparse mostra  o argumento abaixo dos parâmetros opcionais ("optional arguments:")
 
 ::
 
@@ -237,8 +267,10 @@ repare que agora o argumento é mostrado abaixo dos parâmetros opcionais ("opti
 podemos executar o script sem nenhum parâmetro ...
 
 
-Chamada sem passar o parâmetro opcional
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Chamada sem o parâmetro opcional
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Execução**: nada é passado ao parâmetro posicional.
 
 .. code-block:: bash
 
@@ -254,6 +286,33 @@ como não passamos nenhum parâmetro, o valor atribuído ao parâmetro dentro do
 
 Mas não houve erro, como acontece em `Chamada do script sem o parâmetro obrigatório`_
 
+
+
+
+Tipagem - além do tipo `string`
+===============================
+
+Por padrão, tudo que vc passar em um parâmetro para o argparse será lido dentro do seu script como uma string.
+
+.. warning:: se o arg for opcional e nada for passado e este assumira `none` !
+
+
+Script sem tipo definido
+------------------------
+
+.. code-block:: pyton
+
+    import argparse
+    parser = argparse.ArgumentParser()
+
+    # isso é um parâmetro opcional. porque adicionamos '--' ao nome do parâmetro.
+    parser.add_argument(
+        "--param_01_opt", help='este param é opcional',
+    )
+
+    args = parser.parse_args()
+
+    print(f'==> O arg posicinal `param_01_opt` recebeu o valor = {args.param_01_opt} \n')
 
 
 
