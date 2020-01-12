@@ -39,7 +39,6 @@ Somente criado o parser  é possível usar o parâmetro `--help` ou na forma abr
     parser.parse_args()
 |
 
-
     **execução** do script no shell
 
     .. code-block:: bash
@@ -225,49 +224,53 @@ Chamada do script com parâmetro opcional
 
 Quando o parâmetro é opcional, temos que passar o nome do parâmetro e o valor (não eomente o valor) para que o argparse possa fazer o recorte ("parser") dos valores.
 
+    Chamada no shell
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    $python argp_04_opcional.py --param_01_opt EuSouOpcional
+        $python argp_04_opcional.py --param_01_opt EuSouOpcional
 
-saida
+    saida
 
-::
+    ::
 
-    ==> O arg posicinal `param_01_opt` recebeu o valor = EuSouOpcional
+        ==> O arg posicinal `param_01_opt` recebeu o valor = EuSouOpcional
+|
 
-**Execução** chamada do script que espera SOMENTE um parâmetro opcional,
-mas o parâmetro é passado sem um nome.
+    **Execução** chamada do script que espera SOMENTE um parâmetro opcional,
+    mas o parâmetro é passado sem um nome.
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    $> python argp_04_opcional.py EuSouOParametro
+        $> python argp_04_opcional.py EuSouOParametro
 
-**saída** com erro, indicando que o argparse não reconheceu o parâmetro informado, porque não há um nome para o parâmetro e também não há um parâmetro posicional.
+    **saída** com erro, indicando que o argparse não reconheceu o parâmetro informado, porque não há um nome para o parâmetro e também não há um parâmetro posicional.
 
-::
+    ::
 
-    usage: argp_04_opcional.py [-h] [--param_01_opt PARAM_01_OPT]
-    argp_04_opcional.py: error: unrecognized arguments: EuSouOParametro
+        usage: argp_04_opcional.py [-h] [--param_01_opt PARAM_01_OPT]
+        argp_04_opcional.py: error: unrecognized arguments: EuSouOParametro
+|
 
+    **Execução:** O "help" do comando também é atualizado sobre o parâmetro opcional.
 
-**Execução:** O "help" do comando também é atualizado sobre o parâmetro opcional.
+    chamada no shell
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    $> python argp_04_opcional.py -h
+        $> python argp_04_opcional.py -h
 
-**saída**
+    **saída**
 
-Ao pedir o "help" do script, repare que argparse mostra  o argumento abaixo dos parâmetros opcionais ("optional arguments:")
+    Ao pedir o "help" do script, repare que argparse mostra  o argumento abaixo dos parâmetros opcionais ("optional arguments:")
 
-::
+    ::
 
-    usage: argp_04_opcional.py [-h] [--param_01_opt PARAM_01_OPT]
+        usage: argp_04_opcional.py [-h] [--param_01_opt PARAM_01_OPT]
 
-    optional arguments:
-      -h, --help            show this help message and exit
-      --param_01_opt PARAM_01_OPT
+        optional arguments:
+          -h, --help            show this help message and exit
+          --param_01_opt PARAM_01_OPT
 
 podemos executar o script sem nenhum parâmetro ...
 
@@ -275,17 +278,17 @@ podemos executar o script sem nenhum parâmetro ...
 Chamada sem o parâmetro opcional
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Execução**: nada é passado ao parâmetro posicional.
+    **Execução**: nada é passado ao parâmetro posicional.
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    $> python argp_04_opcional.py
+        $> python argp_04_opcional.py
 
-**saída**
+    **saída**
 
-::
+    ::
 
-    ==> O arg posicinal `param_01_opt` recebeu o valor = None
+        ==> O arg posicinal `param_01_opt` recebeu o valor = None
 
 como não passamos nenhum parâmetro, o valor atribuído ao parâmetro dentro do script é `none`.
 
@@ -303,7 +306,7 @@ ao invés de chamarmos o script passando o nome completo da variável como abaix
 
 .. code-block:: bash
 
-    # forma longa 
+    # forma longa
     $> python argp_04_opcional.py --param_01_opt EuSouOpcional
 
 
@@ -315,14 +318,14 @@ Se adicionarmos mais um parâmetro ao comando, neste caso o `-p`.
         '-p', '--param_01_opt', help='este param é opcional',
     )
 
-podemos executar o comando 
+podemos executar o comando
 
 .. code-block:: bash
 
     # podemos utilizar a forma curta do comando.
     $> python argp_04_opcional.py -p EuSouOpcionalCURTO
 
-o help do ArgParse também mostra a forma curta 
+o help do ArgParse também mostra a forma curta
 
     **execução**
 
@@ -342,16 +345,24 @@ o help do ArgParse também mostra a forma curta
                                 este param é opcional
 
 
+Existem várias outras maneiras de implementar comandos opcionais com o argparse... veja mais em
+
+- https://docs.python.org/3/library/argparse.html#action
+- https://docs.python.org/3/library/argparse.html#nargs
+
+
 Tipagem - além do tipo `string`
 ===============================
 
-Por padrão, tudo que vc passar em um parâmetro para o argparse será lido dentro do seu script como uma string.
+Por padrão, tudo que vc passar em um parâmetro para o argparse será lido dentro do seu script como um tipo `string`.
 
 .. warning:: se o arg for opcional e nada for passado e este assumira `none` !
 
 
-Script sem tipo definido
-------------------------
+Script com argumento sem tipo definido
+--------------------------------------
+
+quando um parâmetro é passado e nenhum tipo é definido no `add_argument`, tudo é recebido como `string`.
 
 .. code-block:: python
 
@@ -359,32 +370,60 @@ Script sem tipo definido
     parser = argparse.ArgumentParser()
 
     # isso é um parâmetro opcional. porque adicionamos '--' ao nome do parâmetro.
-    parser.add_argument(
-        "--param_01_opt", help='este param é opcional',
-    )
+    parser.add_argument("param01", help='para para verificar o tipo')
 
     args = parser.parse_args()
 
-    print(f'==> O arg posicinal `param_01_opt` recebeu o valor = {args.param_01_opt} \n')
-
-
-
-.. note:: notas 
+    # Print o tipo
+    print(f'==> O arg posicinal `param_01_opt` é do tipo = {type(args.param01)} \n')
 
 |
+    chamada ...
 
-.. warning:: warning asasdf
+    .. code-block:: bash
 
+        $python argp_05_tipo.py 3
 |
+    saída
 
-.. caution:: caution afaslkasd
+    ::
 
-|
+        ==> O arg posicinal `param_01_opt` é do tipo = <class 'str'>
 
-.. attention:: attention asdfasdf
 
-|
+Definindo o tipo da entrada
+---------------------------
 
+Podemos adicionar mais um parâmetro ao `add_argument`,  o `type=`
+
+
+
+.. attention::
+    attention admonition
+
+.. caution::
+    caution admonition
+
+.. danger::
+    danger admonition
+
+.. error::
+    error admonition
+
+.. hint::
+    hint admonition
+
+.. important::
+    important admonition
+
+.. note::
+    note admonition
+
+.. tip::
+    tip admonition
+
+.. warning::
+    warning admonition
 
 
 
