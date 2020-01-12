@@ -16,6 +16,8 @@ ArgParse tutorial  exemplos
 
 A interface mais simples que você pode ter com o usuário e um script Python - a linha de comando.
 
+Sobre este doc, há várias chamadas do script pelo shell do OS representadas como abaixo.
+
     O `$ ` indica que o que vem a seguir foi digitado na linha de comando do shell.
 
     .. code-block:: bash
@@ -32,20 +34,19 @@ Somente criado o parser  é possível usar o parâmetro `--help` ou na forma abr
 
 .. code-block:: python
 
-    # exemplo
-    # file: argp_01.py
+    # exemplo file: argp_01.py
     import argparse
     parser = argparse.ArgumentParser()
     parser.parse_args()
 |
 
-    **execução** do script no shell
+    execução do script no shell
 
     .. code-block:: bash
 
         $> python argp_01.py --help
 
-    **saída** ...
+    saída ...
 
     ::
 
@@ -55,10 +56,7 @@ Somente criado o parser  é possível usar o parâmetro `--help` ou na forma abr
             -h, --help  show this help message and exit
 
 
-Desligar o help padrão
-----------------------
-
-para desligar o help padrão use o parâmetro `add_help=False`.
+Para desligar o help padrão use o parâmetro `add_help=False`.
 
 .. code-block:: python
 
@@ -69,7 +67,7 @@ para desligar o help padrão use o parâmetro `add_help=False`.
     parser.parse_args()
 |
 
-    **execução** do script no shell
+    execução do script no shell
 
     .. code-block:: bash
 
@@ -81,15 +79,16 @@ para desligar o help padrão use o parâmetro `add_help=False`.
 
         usage: argp_02_nohelp.py
 
-        argp_02_nohelp.py: error: unrecognized arguments: -h
+        argp_02_nohelp.py: erro: unrecognized arguments: -h
 
 
-Parâmetros posicionais
+Parâmetros Posicionais
 ======================
 
+Parâmetros posicionais são obrigatórios por padrão.
 
-Código com parâmetro POSICIONAL (obrigatório)
----------------------------------------------
+Para definirmos uma parâmetro, usamos o método `add_argument`_
+
 
 .. code-block:: python
 
@@ -103,8 +102,7 @@ Código com parâmetro POSICIONAL (obrigatório)
     parser.add_argument("param_01_pos", help='msg de help do parametro "param_01_pos"')
     args = parser.parse_args()
 
-    # print para vermos a saida  ...  ==> mensagem <valor>
-    # estou usando `f string` saiba mais aqui https://docs.python.org/3/reference/lexical_analysis.html#formatted-string-literals
+    # print para vermos a saida  "==> O arg ... <valor>"
     print(f'==> O arg posicinal `param_01_pos` recebeu o valor = {args.param_01_pos} \n')
 
 
@@ -113,69 +111,68 @@ Código com parâmetro POSICIONAL (obrigatório)
     utilizei  `F strings` do Python 3.
     saiba mais em  https://docs.python.org/3/reference/lexical_analysis.html#formatted-string-literals
 
-Voltando ao nosso exemplo de ArgParse...
 
-ao adicionarmos um argumento posicional, o `argparse` adiciona este ao help, e faz as validações indicando se o parâmetro obrigatório foi ou não passado.
+Novo parâmetro, nova msg de ajuda (help)
+----------------------------------------
+
+O help gerado pelo argparse, automaticamente reconhece o novo parâmetro.
+
+Podemos ver o help, incluindo a ajuda citando o parâmetro obrigatório que está definido no script acima.
+
+    Mensagem de ajuda, incluindo o parâmetro obrigatório.
+    Chamada do script com parâmetro ``-h``
+
+    .. code-block:: bash
+
+        $> python argp_03_posicional.py -h
+
+    resultado no shell
+
+    ::
+
+        usage: argp_03_posicional.py [-h] param_01_pos
+
+        positional arguments:
+          param_01_pos  msg de help do parametro "param_01_pos"
+
+        optional arguments:
+          -h, --help    show this help message and exit
 
 
-chamada passando o parâmetro obrigatório
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Passando o parâmetro pelo "*shell*"
+-----------------------------------
 
-    **execução**
+    execução do script com o parâmetro posicional (obrigatório).
 
     .. code-block:: bash
 
         $> python argp_03_posicional.py ArgumentoPosicional
 
-    **saída** da chamada com parâmetro ...
+    saída do script executado com parâmetro ...
 
     ::
 
         ==> O arg posicinal `param_01_pos` recebeu o valor = ArgumentoPosicional
 
 
-Chamada do script sem o parâmetro obrigatório
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Erro - se não for passado o parâmetro posicional
+------------------------------------------------
 
-.. code-block:: bash
+O argParse automaticamente gerencia os parâmetros gerando uma mensagem de erro caso algum parâmetronao esteja correto, ou neste caso, como um parâmetro obrigatório não foi informado o argparse já retorna uma msg de erro formatada para o usuário.
 
-    $> python argp_03_posicional.py
+    Execução do script sem o parâmetro obrigatório
 
-e quando o script é chamado sem parâmetro nenhum, nem mesmo o `--help`, ai sim, temos uma indicação de erro.
+    .. code-block:: bash
 
-**saída** com **erro** por falta do parâmetro obrigatório
-
-::
-
-    usage: argp_03_posicional.py [-h] param_01_pos
-    argp_03_posicional.py: error: the following arguments are required: param_01_pos
-
-... e claro, se passarmos o argumento corretamente ao executar o script, o `argparse` coloca o valor recebido "dentro" do atributo `param_01_pos` para que o script possa utilizá-lo.
+        $> python argp_03_posicional.py
 
 
-Chamada com `-h` após parâmetro posicional
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    **saída** com **erro** por falta do parâmetro obrigatório
 
-.. code-block:: bash
+    ::
 
-    $> python argp_03_posicional.py -h
-
-**saída**
-
-::
-
-    usage: argp_03_posicional.py [-h] param_01_pos
-
-    positional arguments:
-      param_01_pos  msg de help do parametro "param_01_pos"
-
-    optional arguments:
-      -h, --help    show this help message and exit
-
-
-Adicionando o parâmetro posicional no script passa a ser obrigatório informar o tal parâmetro.
-
-O ArgParse trata a entrada, se não informada, ele mostra uma mensagem de erro informando o usuário que um parâmetro é requerido.
+        usage: argp_03_posicional.py [-h] param_01_pos
+        argp_03_posicional.py: error: the following arguments are required: param_01_pos
 
 
 Parâmetros Opcionais
@@ -184,20 +181,17 @@ Parâmetros Opcionais
 
 Parâmetros opcionais são adicionados da mesma maneira que parâmetro posicionais, ou seja, utilizando o `add_argument` do `parser`.
 
-O que torna um argumento opcional é adicionar `--` a frente do nome do argumento.
+O que torna um argumento opcional é adicionar ``--`` a frente do nome do argumento - ex.: ``--param01`` 
+
 
 
 .. code-block:: python
 
     # adicionar é um parâmetro POSICIONAL (obrigatório)
-    parser.add_argument(
-        "param_01_pos", help='este param é obrigatório'
-    )
+    parser.add_argument("param_01_pos", help='este param é obrigatório')
 
     # adiciona parâmetro OPCIONAL.
-    parser.add_argument(
-        "--param_01_opt", help='este param é opcional', action="store_true"
-    )
+    parser.add_argument("--param_01_opt", help='este param é opcional', action="store_true")
 
 
 Script com parâmetro OPCIONAL (não obrigatório e não posicional)
@@ -208,12 +202,8 @@ Script com parâmetro OPCIONAL (não obrigatório e não posicional)
 
     import argparse
     parser = argparse.ArgumentParser()
-
     # isso é um parâmetro opcional. porque adicionamos '--' ao nome do parâmetro.
-    parser.add_argument(
-        "--param_01_opt", help='este param é opcional',
-    )
-
+    parser.add_argument("--param_01_opt", help='este param é opcional')
     args = parser.parse_args()
 
     print(f'==> O arg posicinal `param_01_opt` recebeu o valor = {args.param_01_opt} \n')
@@ -351,84 +341,115 @@ Existem várias outras maneiras de implementar comandos opcionais com o argparse
 - https://docs.python.org/3/library/argparse.html#nargs
 
 
-Tipagem - além do tipo `string`
-===============================
+Argumento com tipo definido - além do tipo `string`
+===================================================
 
 Por padrão, tudo que vc passar em um parâmetro para o argparse será lido dentro do seu script como um tipo `string`.
 
-.. warning:: se o arg for opcional e nada for passado e este assumira `none` !
+.. warning:: se o *arg* for opcional e nada for passado este assumirá `none`  !
 
+.. _check arg sem tipo:
 
-Script com argumento sem tipo definido
---------------------------------------
-
-quando um parâmetro é passado e nenhum tipo é definido no `add_argument`, tudo é recebido como `string`.
+Checando argumento sem tipo
+---------------------------
 
 .. code-block:: python
 
     import argparse
     parser = argparse.ArgumentParser()
-
-    # isso é um parâmetro opcional. porque adicionamos '--' ao nome do parâmetro.
     parser.add_argument("param01", help='para para verificar o tipo')
-
     args = parser.parse_args()
-
-    # Print o tipo
+    # a saída do script é o tipo do argumento de entrada.
     print(f'==> O arg posicinal `param_01_opt` é do tipo = {type(args.param01)} \n')
 
 |
-    chamada ...
+    execução do script sem o *type* - com tipo indefinido
 
     .. code-block:: bash
 
         $python argp_05_tipo.py 3
 |
-    saída
+    saída: o tipo de saída é string, mesmo passando um número (supostamente um inteiro)
 
     ::
 
         ==> O arg posicinal `param_01_opt` é do tipo = <class 'str'>
 
-
-Definindo o tipo da entrada
----------------------------
-
-Podemos adicionar mais um parâmetro ao `add_argument`,  o `type=`
+Para definir o tipo esperado na entrada usamos o argumento `type`, no método `add_argument`.
 
 
+Script com Tipo do argumento definido
+-------------------------------------
 
-.. attention::
-    attention admonition
+Vamos definir um tipo de entrada como inteiro (`<class int>`)
 
-.. caution::
-    caution admonition
+.. code-block:: python
 
-.. danger::
-    danger admonition
+    import argparse
+    parser = argparse.ArgumentParser()
+    # repare no argumento `type=int`
+    parser.add_argument("param01", type=int, help='para para verificar o tipo')
+    args = parser.parse_args()
+    print(f'==> O arg posicinal `param_01_opt` é do tipo = {type(args.param01)} \n')
+|
 
-.. error::
-    error admonition
+Executamos o script passando um argumento capaz de ser transformado em um inteiro
 
-.. hint::
-    hint admonition
+    Chamada do ecript com um argumento capaz de ser entendido como um tipo `int`
 
-.. important::
-    important admonition
+    .. code-block:: bash
 
-.. note::
-    note admonition
-
-.. tip::
-    tip admonition
-
-.. warning::
-    warning admonition
+        $> python argp_05_tipo.py 3
 
 
+    saida: ao definir o tipo (`type=int`), temos um objeto `int`
+
+    ::
+
+        ==> O arg posicinal `param01` é do tipo = <class 'int'>
+
+Ao verificarmos a saída acima, o tipo recebido pelo script é tratado como  um inteiro, e não uma *string* como nos exemplos anteriores.
+
+E se, passarmos um valor, o qual não pode ser "transformado" em um inteiro ?
+
+    execução: Passando um *string* quando esperado um tipo *int*
+
+    .. code-block:: bash
+
+        $> python argp_05_tipo.py EuNãoSouUmNúmero
+
+    saída: com erro de *parâmetro inválido*
+
+    ::
+
+        usage: argp_05_tipo.py [-h] param01
+        argp_05_tipo.py: error: argument param01: invalid int value: 'EuNãoSouUmNúmero'
 
 
+mais info em `type argument`_
 
 
+- `type argument doc <https://docs.python.org/3/library/argparse.html#type>`_
 
 
+.. type_add : https://docs.python.org/3/library/argparse.html#type
+
+--------------------------------------------------
+
+
+.. _`add_argument`: https://docs.python.org/3/library/argparse.html#the-add-argument-method
+
+--------------------------------
+
+
+application's ``models.py`` or ``models/__init__.py``.
+
+Returns a date object containing the first day of the week after the date provided.
+
+This function can also return ``None`` or raise an
+
+:class:`~django.http.Http404` exception, depending on the values of
+
+:attr:`~BaseDateListView.allow_empty` and
+
+:attr:`~DateMixin.allow_future`.
